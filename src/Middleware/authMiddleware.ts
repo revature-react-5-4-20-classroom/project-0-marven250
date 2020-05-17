@@ -25,32 +25,19 @@ export function authRoleFactory(roles: string[]) {
 
 // Our factory can produce our admin role middleware.
 
-// let GET requests in from anyone, let POST/other requests in if the user is logged in
-export const authReadOnlyMiddleware = (
+export const userAuthMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  if (req.method === "GET") {
-    next();
-  } else if (!req.session || !req.session.user) {
+  if (!req.session || !req.session.user) {
     res.status(401).send(`Cannot ${req.method} unless you first login`);
+  } else if (req.method === "GET") {
+    next();
+  } else if (req.method === "PATCH") {
   } else {
-    next();
-  }
-};
-
-export const authMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (req.method === "GET") {
-    console.log(req.query);
-    next();
-  } else if (!req.session || !req.session.user) {
-    res.status(401).send(`Cannot ${req.method} unless you first login`);
-  } else {
-    next();
+    res
+      .status(400)
+      .send("Type of user does not have access to such priviliges");
   }
 };

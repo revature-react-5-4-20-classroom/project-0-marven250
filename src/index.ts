@@ -4,10 +4,12 @@ import bodyParser from "body-parser";
 import { userRouter } from "./Routers/userRoutes";
 import { reimbursementRouter } from "./Routers/reimbursementRoutes";
 import { findUserByUsernamePassword } from "./Database/user-data-access";
+import { sessionMiddleware } from "./Middleware/sessionMiddleware";
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+app.use(sessionMiddleware);
 app.use("/users", userRouter);
 app.use("/reimbursements", reimbursementRouter);
 

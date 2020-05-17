@@ -1,28 +1,44 @@
 import express, { Request, Response, Router, NextFunction } from "express";
 import { User } from "../Models/User";
 export const userRouter: Router = express.Router();
-import { authMiddleware } from "../Middleware/authMiddleware";
-import { getAllUsers } from "../Database/user-data-access";
+import { userAuthMiddleware } from "../Middleware/authMiddleware";
+import { getAllUsers, getUserById } from "../Database/user-data-access";
 
-userRouter.use("/", authMiddleware);
+userRouter.use("/", userAuthMiddleware);
 
 userRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    req.session
-      ? console.log(req.session.user)
-      : console.log("There's no session");
-    // get all users, using async/await
-    const users: User[] = await getAllUsers();
-    res.json(users);
-  } catch (e) {
-    next(e);
+  if (req.session && req.session.user.role === "finance-manager") {
+    try {
+      const users: User[] = await getAllUsers();
+      res.json(users);
+    } catch (e) {
+      next(e);
+    }
+  } else {
+    res.status(400).send("Access denied");
   }
 });
 
-userRouter.get("/:id", (req: Request, res: Response) => {
-  //Allowed Roles finance-manager or if the id provided matches the id of the current user
-  // Response: [   User ]
-});
+userRouter.get(
+  "/:id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = Number(req.params.id);
+      if (
+        (req.session && req.session.user.id === id) ||
+        (req.session && req.session.user.role === "finance-manager")
+      ) {
+        const singleUser: User[] = await getUserById(id);
+        console.log(id, singleUser[0].id);
+        res.json(singleUser);
+      } else {
+        res.status(400).send("You don't have access to his user");
+      }
+    } catch (e) {
+      next(e);
+    }
+  }
+);
 
 userRouter.patch("/", (req: Request, res: Response) => {
   //Allowed Roles admin

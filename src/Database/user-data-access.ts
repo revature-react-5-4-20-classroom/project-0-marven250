@@ -54,3 +54,32 @@ export async function getAllUsers(): Promise<User[]> {
     client && client.release();
   }
 }
+
+export async function getUserById(id: number): Promise<User[]> {
+  let client: PoolClient = await connectionPool.connect();
+  try {
+    let result: QueryResult = await client.query(
+      `SELECT users.id, users.username, users.firstname, users.lastname, users.password, users.email, role.role_name
+        FROM projectZero.users INNER JOIN projectZero.role on users.role_id =role.id 
+        where ${id} = users.id`
+    );
+
+    return result.rows.map((u) => {
+      return new User(u.id, u.username, u.password, u.email, u.role_name);
+    });
+  } catch (e) {
+    throw new Error(`Failed to query for all users: ${e.message}`);
+  } finally {
+    client && client.release();
+  }
+}
+
+// export async function patchUser(id:number, userName:string, firstName:string, lastName:string, passWord:string, email:string, role:string):promise<User>{
+//   let client: PoolClient = await connectionPool.connect();
+//   let patchId =id, patchUserName= userName, patchFirstName= firstName, patchLastName= lastName, patchPassWord= passWord, patchEmail= email, patchRole= role
+
+//   try {
+//     let result: QueryResult = await client.query(
+//       `UPDATE projectZero.users SET first_name = 'Robert', last_name = 'Walter'`
+//     );
+// }
