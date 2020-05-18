@@ -9,6 +9,7 @@ const app: Application = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(sessionMiddleware);
 app.use("/users", userRouter);
 app.use("/reimbursements", reimbursementRouter);

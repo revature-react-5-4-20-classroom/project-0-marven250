@@ -2,7 +2,11 @@ import express, { Request, Response, Router, NextFunction } from "express";
 import { User } from "../Models/User";
 export const userRouter: Router = express.Router();
 import { userAuthMiddleware } from "../Middleware/authMiddleware";
-import { getAllUsers, getUserById } from "../Database/user-data-access";
+import {
+  getAllUsers,
+  getUserById,
+  patchUser,
+} from "../Database/user-data-access";
 
 userRouter.use("/", userAuthMiddleware);
 
@@ -29,7 +33,7 @@ userRouter.get(
         (req.session && req.session.user.role === "finance-manager")
       ) {
         const singleUser: User[] = await getUserById(id);
-        console.log(id, singleUser[0].id);
+
         res.json(singleUser);
       } else {
         res.status(400).send("You don't have access to his user");
@@ -40,9 +44,39 @@ userRouter.get(
   }
 );
 
-userRouter.patch("/", (req: Request, res: Response) => {
-  //Allowed Roles admin
-  // The userId must be present as well as all fields to update, any field left undefined will not be updated.
-  // Request: User
-  // Response: User
-});
+userRouter.patch(
+  "/",
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    const {
+      id,
+      username,
+      firstname,
+      lastname,
+      password,
+      email,
+      role,
+    } = req.body;
+
+    if (req.session && req.session.user.role === "admin") {
+      if (id == false) res.send("you need id to patch user");
+
+      try {
+        const patchedUser = await patchUser(
+          id,
+          username,
+          firstname,
+          lastname,
+          password,
+          email,
+          role
+        );
+        res.status(200).json(patchedUser);
+      } catch (e) {
+        next(e);
+      }
+    } else {
+      res.status(400).send("Only admin user has such privileges");
+    }
+  }
+);

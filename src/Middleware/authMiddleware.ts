@@ -35,6 +35,7 @@ export const userAuthMiddleware = (
   } else if (req.method === "GET") {
     next();
   } else if (req.method === "PATCH") {
+    next();
   } else {
     res
       .status(400)
