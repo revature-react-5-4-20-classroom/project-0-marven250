@@ -30,7 +30,9 @@ app.post("/login", async (req: Request, res: Response) => {
       res.json(user);
     } catch (e) {
       console.log(e.message);
-      res.status(400).send("Invalid credentials");
+      res.status(400).json({
+        message: "Invalid Credentials",
+      });
     }
   }
 });

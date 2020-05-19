@@ -118,7 +118,7 @@ export async function patchUser(
         `UPDATE projectZero.users SET username= $2, firstname = $3, lastname = $4, password= $5, email = $6, role_id= $7 WHERE id = $1`,
         [id, userName, firstName, lastName, passWord, email, role]
       );
-      console.log(result);
+      //console.log(result);
       let result2: QueryResult = await client.query(
         ` SELECT * from projectZero.users WHERE id = $1`,
         [id]
@@ -150,6 +150,188 @@ export async function patchUser(
       );
       return result2.rows[0];
     }
+    if (userName && firstName && lastName) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET username= $2, firstname = $3, lastname= $4 WHERE id = $1 `,
+        [id, userName, firstName, lastName]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (userName && firstName && lastName && passWord) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET username= $2, firstname = $3, lastname= $4, password = $5 WHERE id = $1 `,
+        [id, userName, firstName, lastName, passWord]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (userName && firstName && lastName && passWord && email) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET username= $2, firstname = $3, lastname= $4, password = $5, email = $6 WHERE id = $1 `,
+        [id, userName, firstName, lastName, passWord, email]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (firstName && lastName && passWord && email) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET  firstname = $2, lastname= $3, password = $4, email = $5 WHERE id = $1 `,
+        [id, firstName, lastName, passWord, email]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (firstName && lastName && passWord) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET  firstname = $2, lastname= $3, password = $4 WHERE id = $1 `,
+        [id, firstName, lastName, passWord]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (firstName && lastName) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET  firstname = $2, lastname= $3  WHERE id = $1 `,
+        [id, firstName, lastName]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (firstName) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET  firstname = $2 WHERE id = $1 `,
+        [id, firstName]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (lastName && passWord && email) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET  lastname= $2, password = $3, email = $4 WHERE id = $1 `,
+        [id, lastName, passWord, email]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (lastName && passWord) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET  lastname= $2, password = $3 WHERE id = $1 `,
+        [id, lastName, passWord]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (lastName && email) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET  lastname= $2, email = $3 WHERE id = $1 `,
+        [id, lastName, email]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (lastName) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET  lastname= $2 WHERE id = $1 `,
+        [id, lastName]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (email && passWord) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET password = $2, email = $3 WHERE id = $1 `,
+        [id, passWord, email]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (passWord) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET password = $2 WHERE id = $1 `,
+        [id, passWord]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
+    if (email) {
+      let result: QueryResult = await client.query(
+        `UPDATE projectZero.users SET email = $2 WHERE id = $1 `,
+        [id, email]
+      );
+
+      console.log(result);
+      let result2: QueryResult = await client.query(
+        ` SELECT * from projectZero.users WHERE id = $1`,
+        [id]
+      );
+      return result2.rows[0];
+    }
   } catch (e) {
     console.log(e.message);
   } finally {
@@ -159,12 +341,12 @@ export async function patchUser(
 
 export async function postReimbursement(
   id: number,
-  author: number,
+  author: string,
   amount: number,
-  dateSubmitted: number,
-  dateResolved: number,
+  dateSubmitted: String,
+  dateResolved: String,
   description: string,
-  resolver: number,
+  resolver: string,
   status: number,
   type: number
 ) {
@@ -205,7 +387,7 @@ export async function postReimbursement(
 
 export async function patchReimbursement(
   id: number,
-  dateResolved: number,
+  dateResolved: String,
   status: number
 ) {
   let client: PoolClient = await connectionPool.connect();
@@ -217,7 +399,7 @@ export async function patchReimbursement(
         `UPDATE projectZero.reimbursement SET dateresolved= $2, rstatus= $3  WHERE id = $1`,
         [id, dateResolved, status]
       );
-      console.log(result, "1234567890123456789");
+      //  console.log(result, "1234567890123456789");
     } catch (e) {
       console.error(e.message);
     }
@@ -227,12 +409,45 @@ export async function patchReimbursement(
         ` SELECT * from projectZero.reimbursement WHERE id = $1`,
         [id]
       );
-      console.log(result2.rows, "!!!!!!!!!!!");
+      // console.log(result2, "!!!!!!!!!!!");
+      // let realPatchedReimbursement = new Reimbursement(id, )
       return result2.rows;
     } catch (e) {
       console.log(e.message);
     } finally {
       client && client.release();
     }
+  }
+}
+
+export async function getReimbursementByStatus(
+  id: number
+): Promise<Reimbursement[]> {
+  let client: PoolClient = await connectionPool.connect();
+  console.log("in reimbursement function", typeof id);
+  try {
+    let result: QueryResult = await client.query(
+      `SELECT * FROM projectZero.reimbursementstatus LEFT JOIN projectZero.reimbursement on reimbursementstatus.statusid = reimbursement.id
+      where reimbursementstatus.statusid =$1 ORDER BY reimbursement.datesubmitted `,
+      [id]
+    );
+    console.log(result, "ayyyyyyyyyy!!!!");
+    return result.rows.map((u) => {
+      return new Reimbursement(
+        u.id,
+        u.author,
+        u.amount,
+        u.dateSubmitted,
+        u.dateResolved,
+        u.description,
+        u.resolver,
+        u.status,
+        u.type
+      );
+    });
+  } catch (e) {
+    throw new Error(e.message);
+  } finally {
+    client && client.release();
   }
 }

@@ -19,7 +19,9 @@ userRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
       next(e);
     }
   } else {
-    res.status(400).send("Access denied");
+    res.status(401).json({
+      message: "The incoming token has expired",
+    });
   }
 });
 
@@ -36,7 +38,9 @@ userRouter.get(
 
         res.json(singleUser);
       } else {
-        res.status(400).send("You don't have access to his user");
+        res.status(401).json({
+          message: "The incoming token has expired",
+        });
       }
     } catch (e) {
       next(e);
@@ -59,7 +63,7 @@ userRouter.patch(
     } = req.body;
 
     if (req.session && req.session.user.role === "admin") {
-      if (id == false) res.send("you need id to patch user");
+      if (id == false) res.send("you need to provide id to patch user");
 
       try {
         const patchedUser = await patchUser(
@@ -76,7 +80,9 @@ userRouter.patch(
         next(e);
       }
     } else {
-      res.status(400).send("Only admin user has such privileges");
+      res.status(401).json({
+        message: "The incoming token has expired",
+      });
     }
   }
 );

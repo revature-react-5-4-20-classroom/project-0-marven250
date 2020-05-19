@@ -1,22 +1,22 @@
 export class Reimbursement {
   id: number; // primary key
-  author: number; // foreign key -> User, not null
+  author: string; // foreign key -> User, not null
   amount: number; // not null
-  dateSubmitted: number; // not null
-  dateResolved: number; // not null
+  dateSubmitted: String; // not null
+  dateResolved: String; // not null
   description: string; // not null
-  resolver: number; // foreign key -> User
+  resolver: String; // foreign key -> User
   status: number; // foreign ey -> ReimbursementStatus, not null
   type: number; // foreign key -> ReimbursementType
 
   constructor(
     id: number,
-    author: number,
+    author: string,
     amount: number,
-    dateSubmitted: number,
-    dateResolved: number,
+    dateSubmitted: String,
+    dateResolved: String,
     description: string,
-    resolver: number,
+    resolver: String,
     status: number,
     type: number
   ) {
