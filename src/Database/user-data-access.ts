@@ -422,28 +422,53 @@ export async function patchReimbursement(
 
 export async function getReimbursementByStatus(id: any) {
   let client: PoolClient = await connectionPool.connect();
-  console.log("in reimbursement function");
+
   try {
     let result: QueryResult = await client.query(
-      `SELECT * FROM projectZero.reimbursementstatus LEFT JOIN projectZero.reimbursement on projectZero.reimbursementstatus.statusid = projectZero.reimbursement.rstatus
-      where  projectZero.reimbursementstatus.statusid = ${1} ORDER BY projectZero.reimbursement.datesubmitted`
+      `SELECT author,amount, datesubmitted, dateresolved, description, resolver, status, reimbursementtype.rtype FROM projectZero.reimbursement inner join projectzero.reimbursementstatus on 
+      projectZero.reimbursementstatus.statusid = projectzero.reimbursement.rstatus
+      inner join projectZero.reimbursementtype on projectZero.reimbursement.rtype  = projectZero.reimbursementtype.typeid 
+      where projectZero.reimbursement.rstatus = ${3} `
     );
-    // console.log(result, "ayyyyyyyyyy!!!!");
+    return result.rows.map((u) => {
+      return u;
+    });
+  } catch (e) {
+  } finally {
+    client && client.release();
+  }
+}
+
+export async function getReimbursementByUser(id: any) {
+  let client: PoolClient = await connectionPool.connect();
+  console.log("in reimbursement function");
+  try {
+    var result: QueryResult = await client.query(
+      `SELECT users.username FROM projectZero.users where projectzero.users.id = $1 `,
+      [id]
+    );
+    console.log(result, "ayyyyyyyyyy!!!!");
   } catch (e) {
     throw new Error(e.message);
   }
 
   try {
+    console.log(result.rows[0].username, "forreallllllllllllllllllllll");
     let result2: QueryResult = await client.query(
-      `SELECT author,amount, datesubmitted, dateresolved, description, resolver, status, reimbursementtype.rtype FROM projectZero.reimbursement inner join projectzero.reimbursementstatus on 
+      `SELECT author,amount, datesubmitted, dateresolved, description, resolver, status, reimbursementtype.rtype 
+      FROM projectZero.reimbursement inner join projectzero.reimbursementstatus on 
       projectZero.reimbursementstatus.statusid = projectzero.reimbursement.rstatus
-      inner join projectZero.reimbursementtype on projectZero.reimbursement.rtype  = projectZero.reimbursementtype.typeid 
-      where projectZero.reimbursement.rstatus = ${1} `
+      inner join projectZero.reimbursementtype on 
+      projectZero.reimbursement.rtype  = projectZero.reimbursementtype.typeid 
+      where projectZero.reimbursement.author = $1 `,
+      [result.rows[0].username]
     );
+    console.log(result2, "woaaaaaaaaaaaa!!!!");
     return result2.rows.map((u) => {
       return u;
     });
   } catch (e) {
+    throw new Error(e.message);
   } finally {
     client && client.release();
   }

@@ -7,6 +7,7 @@ import {
   postReimbursement,
   patchReimbursement,
   getReimbursementByStatus,
+  getReimbursementByUser,
 } from "../Database/user-data-access";
 
 reimbursementRouter.get(
@@ -127,13 +128,15 @@ reimbursementRouter.get(
     // Response: [ Reimbursement ]
     console.log("we've hit our endpoint");
     try {
-      const id = Number(req.params.id);
+      console.log(req.params);
+      const id = req.params.userId;
+      console.log("this is usernmae in id", id);
       if (req.session && req.session.user) {
         if (
           (req.session && req.session.user.id === id) ||
           (req.session && req.session.user.role === "finance-manager")
         ) {
-          const singleReimbursement = await getReimbursementByStatus(id);
+          const singleReimbursement = await getReimbursementByUser(id);
 
           res.json(singleReimbursement);
         } else {
