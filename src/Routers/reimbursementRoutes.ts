@@ -131,9 +131,10 @@ reimbursementRouter.get(
       console.log(req.params);
       const id = req.params.userId;
       console.log("this is usernmae in id", id);
+      console.log(req.session && req.session.user, "pppppppppppppppppp");
       if (req.session && req.session.user) {
         if (
-          (req.session && req.session.user.id === id) ||
+          (req.session && Number(req.session.user.id) === Number(id)) ||
           (req.session && req.session.user.role === "finance-manager")
         ) {
           const singleReimbursement = await getReimbursementByUser(id);
