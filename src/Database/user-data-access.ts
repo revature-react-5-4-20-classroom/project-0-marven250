@@ -424,14 +424,13 @@ export async function getReimbursementByStatus(
   id: number
 ): Promise<Reimbursement[]> {
   let client: PoolClient = await connectionPool.connect();
-  console.log("in reimbursement function", typeof id);
+  console.log("in reimbursement function");
   try {
     let result: QueryResult = await client.query(
-      `SELECT * FROM projectZero.reimbursementstatus LEFT JOIN projectZero.reimbursement on reimbursementstatus.statusid = reimbursement.id
-      where reimbursementstatus.statusid =$1 ORDER BY reimbursement.datesubmitted `,
-      [id]
+      `SELECT * FROM projectZero.reimbursementstatus LEFT JOIN projectZero.reimbursement on projectZero.reimbursementstatus.statusid = projectZero.reimbursement.id
+      where  projectZero.reimbursementstatus.statusid = ${1} ORDER BY projectZero.reimbursement.datesubmitted`
     );
-    console.log(result, "ayyyyyyyyyy!!!!");
+    // console.log(result, "ayyyyyyyyyy!!!!");
     return result.rows.map((u) => {
       return new Reimbursement(
         u.id,
