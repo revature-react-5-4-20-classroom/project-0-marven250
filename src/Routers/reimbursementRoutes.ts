@@ -18,17 +18,12 @@ reimbursementRouter.get(
     try {
       const id = Number(req.params.id);
       if (req.session && req.session.user) {
-        if (
-          (req.session && req.session.user.id === id) ||
-          (req.session && req.session.user.role === "finance-manager")
-        ) {
-          const singleReimbursement: Reimbursement[] = await getReimbursementByStatus(
-            id
-          );
+        if (req.session && req.session.user.role === "finance-manager") {
+          const statusReimbursement = await getReimbursementByStatus(id);
 
-          res.json(singleReimbursement);
+          res.json(statusReimbursement);
         } else {
-          res.status(400).send("You don't have access to his user");
+          res.status(400).send("You don't have access to this user's info");
         }
       } else {
         res.status(400).json({
@@ -45,12 +40,22 @@ reimbursementRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     if (req.session && req.session.user) {
-      const { id, amount, description, type } = req.body;
-      const dateSubmitted = moment().format("MMMM Do YYYY, h:mm:ss a");
-      const author = req.session && req.session.user.username;
-      const dateResolved = "";
-      const resolver = "finance-manager";
-      const status = 1;
+      let {
+        id,
+        amount,
+        description,
+        type,
+        dateSubmitted,
+        author,
+        dateResolved,
+        resolver,
+        status,
+      } = req.body;
+      dateSubmitted = moment().format("MMMM Do YYYY, h:mm:ss a");
+      author = req.session && req.session.user.username;
+      dateResolved = "";
+      resolver = "finance-manager";
+      status = 1;
 
       try {
         // if (req.session && req.session.user) {
@@ -111,6 +116,36 @@ reimbursementRouter.patch(
       res.status(400).json({
         message: "The incoming token has expired",
       });
+    }
+  }
+);
+
+reimbursementRouter.get(
+  "/author/userId/:userId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    //Allowed Roles finance-manager or if ther userId is the user making the request.
+    // Response: [ Reimbursement ]
+    console.log("we've hit our endpoint");
+    try {
+      const id = Number(req.params.id);
+      if (req.session && req.session.user) {
+        if (
+          (req.session && req.session.user.id === id) ||
+          (req.session && req.session.user.role === "finance-manager")
+        ) {
+          const singleReimbursement = await getReimbursementByStatus(id);
+
+          res.json(singleReimbursement);
+        } else {
+          res.status(400).send("You don't have access to his user");
+        }
+      } else {
+        res.status(400).json({
+          message: "The incoming token has expired",
+        });
+      }
+    } catch (e) {
+      next(e);
     }
   }
 );

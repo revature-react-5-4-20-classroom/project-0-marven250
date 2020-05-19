@@ -420,32 +420,30 @@ export async function patchReimbursement(
   }
 }
 
-export async function getReimbursementByStatus(
-  id: number
-): Promise<Reimbursement[]> {
+export async function getReimbursementByStatus(id: any) {
   let client: PoolClient = await connectionPool.connect();
   console.log("in reimbursement function");
   try {
     let result: QueryResult = await client.query(
-      `SELECT * FROM projectZero.reimbursementstatus LEFT JOIN projectZero.reimbursement on projectZero.reimbursementstatus.statusid = projectZero.reimbursement.id
+      `SELECT * FROM projectZero.reimbursementstatus LEFT JOIN projectZero.reimbursement on projectZero.reimbursementstatus.statusid = projectZero.reimbursement.rstatus
       where  projectZero.reimbursementstatus.statusid = ${1} ORDER BY projectZero.reimbursement.datesubmitted`
     );
     // console.log(result, "ayyyyyyyyyy!!!!");
-    return result.rows.map((u) => {
-      return new Reimbursement(
-        u.id,
-        u.author,
-        u.amount,
-        u.dateSubmitted,
-        u.dateResolved,
-        u.description,
-        u.resolver,
-        u.status,
-        u.type
-      );
-    });
   } catch (e) {
     throw new Error(e.message);
+  }
+
+  try {
+    let result2: QueryResult = await client.query(
+      `SELECT author,amount, datesubmitted, dateresolved, description, resolver, status, reimbursementtype.rtype FROM projectZero.reimbursement inner join projectzero.reimbursementstatus on 
+      projectZero.reimbursementstatus.statusid = projectzero.reimbursement.rstatus
+      inner join projectZero.reimbursementtype on projectZero.reimbursement.rtype  = projectZero.reimbursementtype.typeid 
+      where projectZero.reimbursement.rstatus = ${1} `
+    );
+    return result2.rows.map((u) => {
+      return u;
+    });
+  } catch (e) {
   } finally {
     client && client.release();
   }
