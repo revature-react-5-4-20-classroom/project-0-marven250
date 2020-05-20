@@ -406,7 +406,11 @@ export async function patchReimbursement(
 
     try {
       let result2: QueryResult = await client.query(
-        ` SELECT * from projectZero.reimbursement WHERE id = $1`,
+        `SELECT id, author, amount, dateSubmitted, dateResolved, description, resolver, status, reimbursementtype.rtype
+        from projectZero.reimbursement inner join projectzero.reimbursementstatus on 
+        projectZero.reimbursementstatus.statusid = projectzero.reimbursement.rstatus
+        inner join projectZero.reimbursementtype on projectZero.reimbursement.rtype  = projectZero.reimbursementtype.typeid
+        WHERE id = $1`,
         [id]
       );
       // console.log(result2, "!!!!!!!!!!!");
@@ -425,7 +429,7 @@ export async function getReimbursementByStatus(id: any) {
   console.log(id, "llllllllllllllllllll");
   try {
     let result: QueryResult = await client.query(
-      `SELECT author,amount, datesubmitted, dateresolved, description, resolver, status, reimbursementtype.rtype FROM projectZero.reimbursement inner join projectzero.reimbursementstatus on 
+      `SELECT id, author,amount, datesubmitted, dateresolved, description, resolver, status, reimbursementtype.rtype FROM projectZero.reimbursement inner join projectzero.reimbursementstatus on 
       projectZero.reimbursementstatus.statusid = projectzero.reimbursement.rstatus
       inner join projectZero.reimbursementtype on projectZero.reimbursement.rtype  = projectZero.reimbursementtype.typeid 
       where projectZero.reimbursement.rstatus = $1 `,
@@ -456,7 +460,7 @@ export async function getReimbursementByUser(id: any) {
   try {
     console.log(result.rows[0].username, "forreallllllllllllllllllllll");
     let result2: QueryResult = await client.query(
-      `SELECT author,amount, datesubmitted, dateresolved, description, resolver, status, reimbursementtype.rtype 
+      `SELECT id, author,amount, datesubmitted, dateresolved, description, resolver, status, reimbursementtype.rtype 
       FROM projectZero.reimbursement inner join projectzero.reimbursementstatus on 
       projectZero.reimbursementstatus.statusid = projectzero.reimbursement.rstatus
       inner join projectZero.reimbursementtype on 

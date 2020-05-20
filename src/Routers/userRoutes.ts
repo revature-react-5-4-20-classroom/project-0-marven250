@@ -63,7 +63,7 @@ userRouter.patch(
     } = req.body;
 
     if (req.session && req.session.user.role === "admin") {
-      if (id == false) res.send("you need to provide id to patch user");
+      if (!id) res.status(400).json("you must provide id of user to patch");
 
       try {
         const patchedUser = await patchUser(
