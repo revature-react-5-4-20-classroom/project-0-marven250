@@ -422,13 +422,14 @@ export async function patchReimbursement(
 
 export async function getReimbursementByStatus(id: any) {
   let client: PoolClient = await connectionPool.connect();
-
+  console.log(id, "llllllllllllllllllll");
   try {
     let result: QueryResult = await client.query(
       `SELECT author,amount, datesubmitted, dateresolved, description, resolver, status, reimbursementtype.rtype FROM projectZero.reimbursement inner join projectzero.reimbursementstatus on 
       projectZero.reimbursementstatus.statusid = projectzero.reimbursement.rstatus
       inner join projectZero.reimbursementtype on projectZero.reimbursement.rtype  = projectZero.reimbursementtype.typeid 
-      where projectZero.reimbursement.rstatus = ${3} `
+      where projectZero.reimbursement.rstatus = $1 `,
+      [id]
     );
     return result.rows.map((u) => {
       return u;

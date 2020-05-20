@@ -17,7 +17,7 @@ reimbursementRouter.get(
     // Response: [ Reimbursement ]
     console.log("we've hit our endpoint");
     try {
-      const id = Number(req.params.id);
+      const id = req.params.statusId;
       if (req.session && req.session.user) {
         if (req.session && req.session.user.role === "finance-manager") {
           const statusReimbursement = await getReimbursementByStatus(id);
