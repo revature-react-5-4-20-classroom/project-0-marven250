@@ -8,6 +8,10 @@ import { sessionMiddleware } from "./Middleware/sessionMiddleware";
 const app: Application = express();
 const PORT = process.env.PORT || 5000;
 
+app.get("/newEndpoin", (req, res) => {
+  res.send("this is our new endPoint!");
+});
+
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(sessionMiddleware);
