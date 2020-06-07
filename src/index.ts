@@ -14,8 +14,9 @@ app.get("/newEndpoin", (req, res) => {
 });
 
 app.use(corsFilter);
+
 app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(sessionMiddleware);
 app.use("/users", userRouter);
 app.use("/reimbursements", reimbursementRouter);

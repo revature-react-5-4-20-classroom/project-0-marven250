@@ -51,7 +51,11 @@ userRouter.get(
 userRouter.patch(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log(
+      "this is server req.body",
+      req.body,
+      "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    );
     const {
       id,
       username,
@@ -62,7 +66,9 @@ userRouter.patch(
       role,
     } = req.body;
 
-    if (req.session && req.session.user.role === "admin") {
+    // if (req.session && req.session.user.role === "admin") {
+    let newidentifyer = req.session && req.session.user.id;
+    if (req.body.id === newidentifyer) {
       if (!id) res.status(400).json("you must provide id of user to patch");
 
       try {
@@ -77,6 +83,7 @@ userRouter.patch(
         );
         res.status(200).json(patchedUser);
       } catch (e) {
+        console.error(e.message);
         next(e);
       }
     } else {
